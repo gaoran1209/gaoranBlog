@@ -18,7 +18,7 @@ const CONFIG = {
   HERO_TITLE_LINK: 'https://wiki.gaoran.xyz',
 
   // 英雄区显示三个置顶分类
-  HERO_CATEGORY_1: { title: '精选AI工具', url: '/category/AI工具' },
+  HERO_CATEGORY_1: { title: '精选AI工具', url: '/article/ai_tools_nav' },
   HERO_CATEGORY_2: { title: '体验评测', url: '/tag/产品体验' },
   HERO_CATEGORY_3: { title: '文章归档', url: '/archive' },
 
