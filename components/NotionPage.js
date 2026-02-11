@@ -286,7 +286,8 @@ const Collection = dynamic(
       m => m.Collection
     ),
   {
-    ssr: true
+    // 部分 Notion 数据在服务端渲染 collection 会触发异常，改为客户端渲染避免构建中断
+    ssr: false
   }
 )
 
