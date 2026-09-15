@@ -46,6 +46,18 @@ const isRateLimited = ip => {
 const hasProperty = (properties, name, type) =>
   properties[name] && (!type || properties[name].type === type)
 
+const getStatusPropertyWrite = (properties, statusName) => {
+  const statusProperty = properties.Status
+  if (!statusProperty) return null
+  if (statusProperty.type === 'select') {
+    return { Status: { select: { name: statusName } } }
+  }
+  if (statusProperty.type === 'status') {
+    return { Status: { status: { name: statusName } } }
+  }
+  return null
+}
+
 const getDatabaseProperties = async notion => {
   const database = await notion.databases.retrieve({ database_id: databaseId })
   return database.properties || {}
@@ -155,8 +167,18 @@ export default async function handler(req, res) {
         rich_text: [{ text: { content: hashEmail(author) } }]
       }
     }
-    if (hasProperty(properties, 'Status', 'select')) {
-      pageProperties.Status = { select: { name: status } }
+    const statusWrite = getStatusPropertyWrite(properties, status)
+    if (requireApproval && !statusWrite) {
+      console.error(
+        'NOTION_COMMENT_REQUIRE_APPROVAL is enabled, but the comment database has no writable Status field (select or status).'
+      )
+      return res.status(503).json({
+        error:
+          'Comment moderation is misconfigured: Status field must be a select or status property when approval is required'
+      })
+    }
+    if (statusWrite) {
+      Object.assign(pageProperties, statusWrite)
     }
     if (hasProperty(properties, 'CreatedAt', 'date')) {
       pageProperties.CreatedAt = { date: { start: new Date().toISOString() } }
