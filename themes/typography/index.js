@@ -7,6 +7,8 @@ import { useRouter } from 'next/router'
 import { createContext, useContext, useEffect, useRef } from 'react'
 import CONFIG from './config'
 import { Style } from './style'
+import BlogListPage from './components/BlogListPage'
+import NavBar from './components/NavBar'
 
 const AdSlot = dynamic(
   () => import('@/components/GoogleAdsense').then(mod => mod.AdSlot),
@@ -43,15 +45,11 @@ const ArticleAround = dynamic(() => import('./components/ArticleAround'), {
   ssr: false
 })
 const TopBar = dynamic(() => import('./components/TopBar'), { ssr: false })
-const NavBar = dynamic(() => import('./components/NavBar'), { ssr: false })
 const JumpToTopButton = dynamic(() => import('./components/JumpToTopButton'), {
   ssr: false
 })
 const Footer = dynamic(() => import('./components/Footer'), { ssr: false })
 const WWAds = dynamic(() => import('@/components/WWAds'), { ssr: false })
-const BlogListPage = dynamic(() => import('./components/BlogListPage'), {
-  ssr: false
-})
 const RecommendPosts = dynamic(() => import('./components/RecommendPosts'), {
   ssr: false
 })

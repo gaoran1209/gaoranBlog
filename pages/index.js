@@ -10,6 +10,7 @@ import { generateRobotsTxt } from '@/lib/utils/robots.txt'
 import { generateRss, shouldGenerateRssForLocale } from '@/lib/utils/rss'
 import { generateSitemapXml } from '@/lib/utils/sitemap.xml'
 import { DynamicLayout } from '@/themes/theme'
+import { LayoutIndex as TypographyLayoutIndex } from '@/themes/typography'
 import { generateRedirectJson } from '@/lib/utils/redirect'
 import { checkDataFromAlgolia } from '@/lib/plugins/algolia'
 import pLimit from 'p-limit'
@@ -22,6 +23,9 @@ import { adapterNotionBlockMap } from '@/lib/utils/notion.util'
  */
 const Index = props => {
   const theme = siteConfig('THEME', BLOG.THEME, props.NOTION_CONFIG)
+  if (theme === 'typography') {
+    return <TypographyLayoutIndex {...props} />
+  }
   return <DynamicLayout theme={theme} layoutName='LayoutIndex' {...props} />
 }
 

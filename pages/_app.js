@@ -9,6 +9,7 @@ import '@/styles/notion.css' //  重写部分notion样式
 import useAdjustStyle from '@/hooks/useAdjustStyle'
 import { GlobalContextProvider } from '@/lib/global'
 import { getBaseLayoutByTheme } from '@/themes/theme'
+import { LayoutBase as TypographyLayoutBase } from '@/themes/typography'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo } from 'react'
 import { getQueryParam } from '../lib/utils'
@@ -76,6 +77,11 @@ const MyApp = ({ Component, pageProps }) => {
   // 整体布局
   const GLayout = useCallback(
     props => {
+      // 当前生产主题需要在服务端直接渲染。异步主题解析只保留给
+      // URL 主题预览与其它可选主题，避免首页构建成空的 __next 容器。
+      if (theme === 'typography') {
+        return <TypographyLayoutBase {...props} />
+      }
       const Layout = getBaseLayoutByTheme(theme)
       return <Layout {...props} />
     },
@@ -86,8 +92,8 @@ const MyApp = ({ Component, pageProps }) => {
   const content = (
     <AppErrorBoundary>
       <GlobalContextProvider {...pageProps}>
+        <SEO {...pageProps} />
         <GLayout {...pageProps}>
-          <SEO {...pageProps} />
           <Component {...pageProps} />
         </GLayout>
         <PWAInstaller NOTION_CONFIG={pageProps?.NOTION_CONFIG} />
