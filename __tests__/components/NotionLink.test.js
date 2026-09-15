@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import NotionLink, {
+  normalizeInternalNotionLink,
   shouldOpenNotionLinkInNewTab
 } from '@/components/NotionLink'
 
@@ -21,6 +22,15 @@ describe('NotionLink', () => {
         'https://blog.example.com'
       )
     ).toBe(false)
+  })
+
+  it('rewrites legacy internal links to the canonical site', () => {
+    const href = normalizeInternalNotionLink(
+      'https://blog.gaoran.xyz/article/links?src=rss#friends',
+      'https://gaoran.cc'
+    )
+
+    expect(href).toBe('https://gaoran.cc/article/links?src=rss#friends')
   })
 
   it('preserves existing rel tokens when forcing a new tab', () => {
