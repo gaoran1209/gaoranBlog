@@ -4,6 +4,7 @@ import { fetchGlobalAllData, getPostBlocks } from '@/lib/db/SiteDataApi'
 import { formatNotionBlock } from '@/lib/db/notion/getPostBlocks'
 import { adapterNotionBlockMap } from '@/lib/utils/notion.util'
 import { DynamicLayout } from '@/themes/theme'
+import { LayoutPostList as TypographyLayoutPostList } from '@/themes/typography'
 
 /**
  * 文章列表分页
@@ -12,6 +13,11 @@ import { DynamicLayout } from '@/themes/theme'
  */
 const Page = props => {
   const theme = siteConfig('THEME', BLOG.THEME, props.NOTION_CONFIG)
+  // 与首页保持一致：当前生产主题直接服务端渲染，避免分页页在
+  // 动态布局解析后出现水合不一致。
+  if (theme === 'typography') {
+    return <TypographyLayoutPostList {...props} />
+  }
   return <DynamicLayout theme={theme} layoutName='LayoutPostList' {...props} />
 }
 
